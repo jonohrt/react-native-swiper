@@ -308,7 +308,7 @@ isScrolling:false});
    * @param  {object} offset content offset
    * @param  {string} dir    'x' || 'y'
    */
-updateIndex:function updateIndex(offset,dir){
+updateIndex:function updateIndex(offset,dir){var _this4=this;
 
 var state=this.state;
 var index=state.index;
@@ -323,7 +323,6 @@ if(!diff)return;
 // the variation of `index` more than 1.
 // parseInt() ensures it's always an integer
 index=parseInt(index+Math.round(diff/step));
-
 if(this.props.loop){
 if(index<=-1){
 index=state.total-1;
@@ -338,27 +337,26 @@ shouldJump=true;
 jumpToIndex=1;
 }
 
+if(_reactNative.Platform.OS==='android'){
+if(shouldJump){
+setTimeout(
+function(){_this4.scrollView.setPageWithoutAnimation(jumpToIndex);},
+500);
+
+}
+}
 }
 this.setState({
 index:index,
 offset:offset});
 
-
-if(_reactNative.Platform.OS==='android'){
-if(shouldJump){
-setTimeout(
-this.scrollView.setPageWithoutAnimation,
-500,
-jumpToIndex);
-}
-}
 },
 
 /**
    * Scroll by index
    * @param  {number} index offset index
    */
-scrollBy:function scrollBy(index){var _this4=this;
+scrollBy:function scrollBy(index){var _this5=this;
 if(this.state.isScrolling||this.state.total<2)return;
 var state=this.state;
 var diff=(this.props.loop?1:0)+index+this.state.index;
@@ -382,7 +380,7 @@ autoplayEnd:false});
 // trigger onScrollEnd manually in android
 if(_reactNative.Platform.OS==='android'){
 this.setTimeout(function(){
-_this4.onScrollEnd({
+_this5.onScrollEnd({
 nativeEvent:{
 position:diff}});
 
@@ -392,7 +390,7 @@ position:diff}});
 
 },
 
-scrollViewPropOverrides:function scrollViewPropOverrides(){var _this5=this;
+scrollViewPropOverrides:function scrollViewPropOverrides(){var _this6=this;
 var props=this.props;
 var overrides={};
 
@@ -414,7 +412,7 @@ prop!=='renderPagination'&&
 prop!=='onScrollBeginDrag')
 {(function(){
 var originResponder=props[prop];
-overrides[prop]=function(e){return originResponder(e,_this5.state,_this5);};})();
+overrides[prop]=function(e){return originResponder(e,_this6.state,_this6);};})();
 }
 }
 
@@ -439,7 +437,7 @@ borderRadius:4,
 marginLeft:3,
 marginRight:3,
 marginTop:3,
-marginBottom:3},__source:{fileName:_jsxFileName,lineNumber:434}});
+marginBottom:3},__source:{fileName:_jsxFileName,lineNumber:432}});
 
 var Dot=this.props.dot||_react2.default.createElement(_reactNative.View,{style:{
 backgroundColor:'rgba(0,0,0,.2)',
@@ -449,7 +447,7 @@ borderRadius:4,
 marginLeft:3,
 marginRight:3,
 marginTop:3,
-marginBottom:3},__source:{fileName:_jsxFileName,lineNumber:444}});
+marginBottom:3},__source:{fileName:_jsxFileName,lineNumber:442}});
 
 for(var i=0;i<this.state.total;i++){
 dots.push(i===this.state.index?
@@ -461,7 +459,7 @@ _react2.default.cloneElement(Dot,{key:i}));
 }
 
 return(
-_react2.default.createElement(_reactNative.View,{pointerEvents:'none',style:[styles['pagination_'+this.state.dir],this.props.paginationStyle],__source:{fileName:_jsxFileName,lineNumber:464}},
+_react2.default.createElement(_reactNative.View,{pointerEvents:'none',style:[styles['pagination_'+this.state.dir],this.props.paginationStyle],__source:{fileName:_jsxFileName,lineNumber:462}},
 dots));
 
 
@@ -472,39 +470,39 @@ var child=this.props.children[this.state.index];
 var title=child&&child.props.title;
 return title?
 
-_react2.default.createElement(_reactNative.View,{style:styles.title,__source:{fileName:_jsxFileName,lineNumber:475}},
+_react2.default.createElement(_reactNative.View,{style:styles.title,__source:{fileName:_jsxFileName,lineNumber:473}},
 this.props.children[this.state.index].props.title):
 
 
 null;
 },
 
-renderNextButton:function renderNextButton(){var _this6=this;
+renderNextButton:function renderNextButton(){var _this7=this;
 var button=void 0;
 
 if(this.props.loop||this.state.index!=this.state.total-1){
-button=this.props.nextButton||_react2.default.createElement(_reactNative.Text,{style:styles.buttonText,__source:{fileName:_jsxFileName,lineNumber:486}},'›');
+button=this.props.nextButton||_react2.default.createElement(_reactNative.Text,{style:styles.buttonText,__source:{fileName:_jsxFileName,lineNumber:484}},'›');
 }
 
 return(
-_react2.default.createElement(_reactNative.TouchableOpacity,{onPress:function onPress(){return button!==null&&_this6.scrollBy.call(_this6,1);},__source:{fileName:_jsxFileName,lineNumber:490}},
-_react2.default.createElement(_reactNative.View,{__source:{fileName:_jsxFileName,lineNumber:491}},
+_react2.default.createElement(_reactNative.TouchableOpacity,{onPress:function onPress(){return button!==null&&_this7.scrollBy.call(_this7,1);},__source:{fileName:_jsxFileName,lineNumber:488}},
+_react2.default.createElement(_reactNative.View,{__source:{fileName:_jsxFileName,lineNumber:489}},
 button)));
 
 
 
 },
 
-renderPrevButton:function renderPrevButton(){var _this7=this;
+renderPrevButton:function renderPrevButton(){var _this8=this;
 var button=null;
 
 if(this.props.loop||this.state.index!=0){
-button=this.props.prevButton||_react2.default.createElement(_reactNative.Text,{style:styles.buttonText,__source:{fileName:_jsxFileName,lineNumber:502}},'‹');
+button=this.props.prevButton||_react2.default.createElement(_reactNative.Text,{style:styles.buttonText,__source:{fileName:_jsxFileName,lineNumber:500}},'‹');
 }
 
 return(
-_react2.default.createElement(_reactNative.TouchableOpacity,{onPress:function onPress(){return button!==null&&_this7.scrollBy.call(_this7,-1);},__source:{fileName:_jsxFileName,lineNumber:506}},
-_react2.default.createElement(_reactNative.View,{__source:{fileName:_jsxFileName,lineNumber:507}},
+_react2.default.createElement(_reactNative.TouchableOpacity,{onPress:function onPress(){return button!==null&&_this8.scrollBy.call(_this8,-1);},__source:{fileName:_jsxFileName,lineNumber:504}},
+_react2.default.createElement(_reactNative.View,{__source:{fileName:_jsxFileName,lineNumber:505}},
 button)));
 
 
@@ -513,14 +511,14 @@ button)));
 
 renderButtons:function renderButtons(){
 return(
-_react2.default.createElement(_reactNative.View,{pointerEvents:'box-none',style:[styles.buttonWrapper,{width:this.state.width,height:this.state.height},this.props.buttonWrapperStyle],__source:{fileName:_jsxFileName,lineNumber:516}},
+_react2.default.createElement(_reactNative.View,{pointerEvents:'box-none',style:[styles.buttonWrapper,{width:this.state.width,height:this.state.height},this.props.buttonWrapperStyle],__source:{fileName:_jsxFileName,lineNumber:514}},
 this.renderPrevButton(),
 this.renderNextButton()));
 
 
 },
 
-renderScrollView:function renderScrollView(pages){var _this8=this;
+renderScrollView:function renderScrollView(pages){var _this9=this;
 if(_reactNative.Platform.OS==='ios')
 return(
 _react2.default.createElement(_reactNative.ScrollView,_extends({ref:'scrollView'},
@@ -530,16 +528,16 @@ contentContainerStyle:[styles.wrapper,this.props.style],
 contentOffset:this.state.offset,
 onScrollBeginDrag:this.onScrollBegin,
 onMomentumScrollEnd:this.onScrollEnd,
-onScrollEndDrag:this.onScrollEndDrag,__source:{fileName:_jsxFileName,lineNumber:526}}),
+onScrollEndDrag:this.onScrollEndDrag,__source:{fileName:_jsxFileName,lineNumber:524}}),
 pages));
 
 
 return(
-_react2.default.createElement(_reactNative.ViewPagerAndroid,_extends({ref:function ref(scrollView){_this8.scrollView=scrollView;}},
+_react2.default.createElement(_reactNative.ViewPagerAndroid,_extends({ref:function ref(scrollView){_this9.scrollView=scrollView;}},
 this.props,{
 initialPage:this.props.loop?this.state.index+1:this.state.index,
 onPageSelected:this.onScrollEnd,
-style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:538}}),
+style:{flex:1},__source:{fileName:_jsxFileName,lineNumber:536}}),
 pages));
 
 
@@ -572,15 +570,15 @@ pages.unshift(total-1);
 pages.push(0);
 }
 pages=pages.map(function(page,i){return(
-_react2.default.createElement(_reactNative.View,{style:pageStyle,key:i,__source:{fileName:_jsxFileName,lineNumber:575}},children[page]));});
+_react2.default.createElement(_reactNative.View,{style:pageStyle,key:i,__source:{fileName:_jsxFileName,lineNumber:573}},children[page]));});
 
 }else
-pages=_react2.default.createElement(_reactNative.View,{style:pageStyle,__source:{fileName:_jsxFileName,lineNumber:578}},children);
+pages=_react2.default.createElement(_reactNative.View,{style:pageStyle,__source:{fileName:_jsxFileName,lineNumber:576}},children);
 
 return(
 _react2.default.createElement(_reactNative.View,{style:[styles.container,{
 width:state.width,
-height:state.height}],__source:{fileName:_jsxFileName,lineNumber:581}},
+height:state.height}],__source:{fileName:_jsxFileName,lineNumber:579}},
 
 this.renderScrollView(pages),
 props.showsPagination&&(props.renderPagination?

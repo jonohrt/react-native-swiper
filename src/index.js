@@ -323,13 +323,12 @@ module.exports = React.createClass({
     // the variation of `index` more than 1.
     // parseInt() ensures it's always an integer
     index = parseInt(index + Math.round(diff / step))
-
     if(this.props.loop) {
       if(index <= -1) {
         index = state.total - 1
         offset[dir] = step * state.total
         shouldJump = true
-        jumpToIndex = state.total 
+        jumpToIndex = state.total
       }
       else if(index >= state.total) {
         index = 0
@@ -338,20 +337,19 @@ module.exports = React.createClass({
         jumpToIndex = 1
       }
 
+    if (Platform.OS === 'android') {
+      if(shouldJump) {
+        setTimeout(
+          ()=> { this.scrollView.setPageWithoutAnimation(jumpToIndex) },
+          500
+          )
+      }
+    }
     }
     this.setState({
       index: index,
       offset: offset,
     })
-
-    if (Platform.OS === 'android') {
-      if(shouldJump) {
-        setTimeout(
-          this.scrollView.setPageWithoutAnimation,
-          500,
-          jumpToIndex)
-      }
-    }
   },
 
   /**
