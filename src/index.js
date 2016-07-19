@@ -264,7 +264,6 @@ module.exports = React.createClass({
     this.setState({
       isScrolling: false
     })
-
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
       if (this.state.dir === 'x') {
@@ -273,7 +272,7 @@ module.exports = React.createClass({
         e.nativeEvent.contentOffset = {y: e.nativeEvent.position * this.state.height}
       }
     }
-
+    
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir)
 
     // Note: `this.setState` is async, so I call the `onMomentumScrollEnd`
@@ -316,6 +315,7 @@ module.exports = React.createClass({
     let diff = offset[dir] - state.offset[dir]
     let step = dir === 'x' ? state.width : state.height
 
+    var shouldJump, jumpToIndex;
     // Do nothing if offset no change.
     if(!diff) return
 
@@ -328,17 +328,30 @@ module.exports = React.createClass({
       if(index <= -1) {
         index = state.total - 1
         offset[dir] = step * state.total
+        shouldJump = true
+        jumpToIndex = state.total 
       }
       else if(index >= state.total) {
         index = 0
         offset[dir] = step
+        shouldJump = true
+        jumpToIndex = 1
       }
-    }
 
+    }
     this.setState({
       index: index,
       offset: offset,
     })
+
+    if (Platform.OS === 'android') {
+      if(shouldJump) {
+        setTimeout(
+          this.scrollView.setPageWithoutAnimation,
+          500,
+          jumpToIndex)
+      }
+    }
   },
 
   /**
@@ -522,7 +535,7 @@ module.exports = React.createClass({
             </ScrollView>
          );
       return (
-         <ViewPagerAndroid ref="scrollView"
+        <ViewPagerAndroid ref={scrollView => {this.scrollView = scrollView}}
           {...this.props}
             initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
             onPageSelected={this.onScrollEnd}
@@ -558,7 +571,6 @@ module.exports = React.createClass({
         pages.unshift(total - 1)
         pages.push(0)
       }
-
       pages = pages.map((page, i) =>
         <View style={pageStyle} key={i}>{children[page]}</View>
       )
